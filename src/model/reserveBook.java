@@ -92,35 +92,47 @@ public class reserveBook  extends HttpServlet {
 	    	 /**fetch reserve successInfo**/
 	    	 int bookLocationIndex = 0, bookDeadLineIndex = 3;
 	    	 String bookTittle= chk_doc.select("html > body > strong").html() ;
-	    	 Elements reserveInfo = reserveInfoDoc.select("  html > body > center > table > tbody > tr >td");
-	         String bookLocation = reserveInfo.get(bookLocationIndex) . html();
-	         String bookDeadLine = reserveInfo.get(bookDeadLineIndex) . html();
-	         	         
-	         /**prepare response**/
-	         JSONObject jsonResponse = new JSONObject();
-	         try {
-				jsonResponse.put("querySuccess", "true");
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-	         try {
-					jsonResponse.put("tittle", bookTittle);
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-	         try {
-					jsonResponse.put("status", bookLocation);
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-	         try {
-					jsonResponse.put("location", bookDeadLine);
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-	       
-	         
-	         out.println(jsonResponse);
+	    	
+	    	  Elements reserveInfo = reserveInfoDoc.select("  html > body > center > table > tbody > tr >td");
+	    	  if (reserveInfo.hasText()) {
+			    	 String bookLocation = reserveInfo.get(bookLocationIndex) . html();
+			         String bookDeadLine = reserveInfo.get(bookDeadLineIndex) . html();
+			         	         
+			         /**prepare response**/
+			         JSONObject jsonResponse = new JSONObject();
+
+					        try {
+								jsonResponse.put("querySuccess", "true");
+							} catch (JSONException e) {
+								e.printStackTrace();
+							}
+					         try {
+									jsonResponse.put("tittle", bookTittle);
+								} catch (JSONException e) {
+									e.printStackTrace();
+								}
+					         try {
+									jsonResponse.put("status", bookLocation);
+								} catch (JSONException e) {
+									e.printStackTrace();
+								}
+					         try {
+									jsonResponse.put("location", bookDeadLine);
+								} catch (JSONException e) {
+									e.printStackTrace();
+								}
+					         
+					         out.println(jsonResponse);
+			         
+	    	  }	else {
+			        	 JSONObject jsonResponse = new JSONObject();
+			        	 try {
+								jsonResponse.put("querySuccess", "false");
+							} catch (JSONException e) {
+								e.printStackTrace();
+							}
+			        	 out.println(jsonResponse);
+	              }
 	 }
 	
 }
