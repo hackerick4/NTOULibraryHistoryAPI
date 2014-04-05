@@ -21,5 +21,15 @@
     <servlet-name>reserveBook</servlet-name>
     <url-pattern>/reserveBook.do</url-pattern>
   </servlet-mapping>
+  
+  
+  <servlet>
+    <servlet-name>getCurrentHolds</servlet-name>
+    <servlet-class>model.getCurrentHolds</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>getCurrentHolds</servlet-name>
+    <url-pattern>/getCurrentHolds.do</url-pattern>
+  </servlet-mapping>
 
 </web-app>

@@ -11,16 +11,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class reserveBook  extends HttpServlet {
-	 public void doPost(HttpServletRequest request, HttpServletResponse response)
+	 /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
 	            throws ServletException, IOException {
 		 
 		 /*****prepare the parameters*****/
@@ -69,8 +72,6 @@ public class reserveBook  extends HttpServlet {
    	    		  .cookie("SESSION_LANGUAGE","cht")
    	    		  .cookie("SESSION_SCOPE","0")
    	    		  .post();
-	         
-	    	 
 	    	 /**start to fetch reserveBookRatio**/
 	         String radioValue= chk_doc.select("html > body > form > table > tbody > tr > td > input").attr("value") ;
 	       
@@ -93,7 +94,10 @@ public class reserveBook  extends HttpServlet {
 	    	 int bookLocationIndex = 0, bookDeadLineIndex = 3;
 	    	 String bookTittle= chk_doc.select("html > body > strong").html() ;
 	    	
-	    	  Elements reserveInfo = reserveInfoDoc.select("  html > body > center > table > tbody > tr >td");
+	    	  Elements reserveInfo = reserveInfoDoc.select("html > body > center > table > tbody > tr >td");
+	    	  
+	    	  
+	    	 
 	    	  if (reserveInfo.hasText()) {
 			    	 String bookLocation = reserveInfo.get(bookLocationIndex) . html();
 			         String bookDeadLine = reserveInfo.get(bookDeadLineIndex) . html();
