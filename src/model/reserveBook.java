@@ -59,7 +59,11 @@ public class reserveBook  extends HttpServlet {
 	    	      String[] cookies = cookie.split(";");
 	    	      String[] sessionString = cookies[ 0 ].split("=");
 	    	      String session = sessionString[ 1 ];
-	    	 //
+		     
+    	    /*detect individual location*/      
+	    	      String location = loginConnection.getHeaderField("Location"); 
+	    	      if (location == null){ out.println("Login failed"); return;}
+
 
 	    	 Document chk_doc =Jsoup.connect(reserveURL)
 	              .data("code" , account)
@@ -116,12 +120,12 @@ public class reserveBook  extends HttpServlet {
 									e.printStackTrace();
 								}
 					         try {
-									jsonResponse.put("status", bookLocation);
+									jsonResponse.put("status", bookDeadLine);
 								} catch (JSONException e) {
 									e.printStackTrace();
 								}
 					         try {
-									jsonResponse.put("location", bookDeadLine);
+									jsonResponse.put("location", bookLocation);
 								} catch (JSONException e) {
 									e.printStackTrace();
 								}

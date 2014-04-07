@@ -31,5 +31,31 @@
     <servlet-name>getCurrentHolds</servlet-name>
     <url-pattern>/getCurrentHolds.do</url-pattern>
   </servlet-mapping>
-
+  
+  <servlet>
+    <servlet-name>cancelReserveBook</servlet-name>
+    <servlet-class>model.cancelReserveBook</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>cancelReserveBook</servlet-name>
+    <url-pattern>/cancelReserveBook.do</url-pattern>
+  </servlet-mapping>  
+  
+  <servlet>
+    <servlet-name>getCurrentBorrowedBooks</servlet-name>
+    <servlet-class>model.getCurrentBorrowedBooks</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>getCurrentBorrowedBooks</servlet-name>
+    <url-pattern>/getCurrentBorrowedBooks.do</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>renewBook</servlet-name>
+    <servlet-class>model.renewBook</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>renewBook</servlet-name>
+    <url-pattern>/renewBook.do</url-pattern>
+  </servlet-mapping>
 </web-app>

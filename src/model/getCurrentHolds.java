@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -34,7 +33,7 @@ public class getCurrentHolds  extends HttpServlet {
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 	            throws ServletException, IOException {
-		 response.setContentType("text/html;charset=utf-8");
+		    response.setContentType("text/html;charset=utf-8");
 	    	String account = request.getParameter("account");
 	    	String pwd = request.getParameter("password");
 	    	PrintWriter out = response.getWriter();
@@ -65,10 +64,15 @@ public class getCurrentHolds  extends HttpServlet {
 	    	      String[] cookies = cookie.split(";");
 	    	      String[] sessionString = cookies[ 0 ].split("=");
 	    	      String session = sessionString[ 1 ];
-	    	      
+	      
+	       /*detect individual location*/      
+	    	      String location = loginConnection.getHeaderField("Location"); 
+	    	      if (location == null){ out.println("Login failed"); return;}
+	    	      String[] myLocationTokens = location.split("/");
+	    	      String myLocation = myLocationTokens[ 2 ];      
 	    
 	    	/**get reserveInfo**/
-	    	Document chk_doc =Jsoup.connect("http://ocean.ntou.edu.tw:1083/patroninfo~S0*cht/1036223/holds")
+	    	Document chk_doc =Jsoup.connect("http://ocean.ntou.edu.tw:1083/patroninfo~S0*cht/" + myLocation +"/holds")
 	    	              .data("code" , account)
 	    	              .data("pin" , pwd)
 	    	              .data("submit.x" , "0")
@@ -94,7 +98,7 @@ public class getCurrentHolds  extends HttpServlet {
 	    		 ReserveBook  reservebook  = new ReserveBook();
 	    		 JSONObject j_reservebook = new JSONObject();
 	    		 reservebook.tittle = reserveBookTittleList.get(chkBox) .html();
-	    		 reservebook.radioValue = reserveBookAnotherInfo.select("input").attr("id").substring(6,14);
+	    		 reservebook.radioValue = reserveBookAnotherInfo.get(reserveInfoPosition-1).select("input").attr("id").substring(6);
 	    		 reservebook.status = reserveBookAnotherInfo.get(reserveInfoPosition+1) . html();
 	    		 reservebook.location = reserveBookAnotherInfo.get(reserveInfoPosition+2) . html();
 	    		  try {

@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -19,26 +18,24 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
-// Extend HttpServlet class
-public class getReadingHistory  extends HttpServlet {
-	 
-    public class History
+public class getCurrentBorrowedBooks  extends HttpServlet {
+	public class BorrowedBook
     {
        public String tittle ="";
-       public String borrowDate = "";
-       public int  chkBox = 0;
-    }
+       public String status = "";
+       public String bookURL = "";
+       public String radioVal = "";
+    }	
 
+	
 	private static final long serialVersionUID = 1L;
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	response.setContentType("text/html;charset=utf-8");
+		response.setContentType("text/html;charset=utf-8");
     	String account = request.getParameter("account");
     	String pwd = request.getParameter("password");
-    	int page = Integer.parseInt( request.getParameter("segment"));
     	PrintWriter out = response.getWriter();
-    	
     	/*****prepare the parameters*****/
     	String urLoginlParameters = "code=" + account + "&pin=" + pwd + "&submit.x=0&submit.y=0&submit=submit";
     	String requestLoginURL = "http://ocean.ntou.edu.tw:1083/patroninfo*cht";
@@ -66,62 +63,62 @@ public class getReadingHistory  extends HttpServlet {
     	      String[] cookies = cookie.split(";");
     	      String[] sessionString = cookies[ 0 ].split("=");
     	      String session = sessionString[ 1 ];
-    	      //out.println(session);
-       
-    	/*detect individual location*/      
+    
+      /*detect individual location*/      
     	      String location = loginConnection.getHeaderField("Location"); 
     	      if (location == null){ out.println("Login failed"); return;}
-    	      String[] myLocationTokens = location.split("/");
-    	      String myLocation = myLocationTokens[ 2 ];    	    
-
-    	/**start to fetch reading history**/
-    	     String requestURL = "http://ocean.ntou.edu.tw:1083/patroninfo~S0*cht/" +  myLocation + "/readinghistory";
-    	     Connection.Response cr =Jsoup.connect(requestURL)
-    	    		  .cookie("III_SESSION_ID", session)
-    	    		  .cookie("III_EXPT_FILE" , "aa17054" )
-    	    		  .cookie("SESSION_LANGUAGE","cht")
-    	    		  .cookie("SESSION_SCOPE","0")
-    	    		  .execute();
-    	     Document doc = Jsoup.parse(cr.body(),"utf-8");
+    	      String[] myLocationTokens = location.split("/");    	     
+    	      String myLocation = myLocationTokens[ 2 ];
     	     
-    	     
-	     /***** fetch History*****/
-	     Elements tittles_HTML = doc.select("html > body > div >form > table >tbody >tr > td >a");
-	     Elements borrowDates_HTML = doc.select("html > body > div > form > table > tbody > tr > td");
-	     
-	    
-	     
-	     /*** convert result to json string***/
-
-	     int NumberOfHistory = tittles_HTML.size() , borrowPostion = 3; //borrow is ar 4th td
-	     JSONArray result = new JSONArray();
-	     for (int historyIndex = (page-1)*10 ; historyIndex < (page-1)*10+10 ; ++historyIndex){
-	    	 if(historyIndex >= NumberOfHistory) break;
-	    	 History h = new History();
-	    	 h.tittle = tittles_HTML.get(historyIndex).html();
-	    	 h.borrowDate = borrowDates_HTML.get(borrowPostion).html();
-	    	 h.chkBox = historyIndex;
-	    	 JSONObject j_history = new JSONObject();
-	    	 try {
-				j_history.put("tittle", h.tittle);
+    	
+    	      
+       /**get reserveInfo**/
+  	    	Document chk_doc =Jsoup.connect("http://ocean.ntou.edu.tw:1083/patroninfo~S0*cht/" +  myLocation + "/items")
+  	    	              .data("code" , account)
+  	    	              .data("pin" , pwd)
+  	    	              .data("submit.x" , "0")
+  	    	              .data("submit.y" , "0")
+  	    	              .data("submit","submit")
+  	       	    		  .cookie("III_SESSION_ID", session)
+  	       	    		  .cookie("III_EXPT_FILE" , "aa17054" )
+  	       	    		  .cookie("SESSION_LANGUAGE","cht")
+  	       	    		  .cookie("SESSION_SCOPE","0")
+  	       	    		  .post();
+  	   // out.println(chk_doc);
+  	   Elements currentBorBooks = chk_doc.select("html > body > div > form > table > tbody > tr > td ");
+  	   int bookPosition = 1 , infoPerBooks = 5;
+  	   JSONArray result = new JSONArray();
+  	   for (int books_iter =0 ; books_iter < currentBorBooks.size()/infoPerBooks ; ++books_iter){
+  		   BorrowedBook  borrowedBook  = new BorrowedBook();
+  		   JSONObject j_borrowedBook= new JSONObject();
+  		   borrowedBook.radioVal = currentBorBooks.get(bookPosition-1).select("input").attr("value");
+  		   borrowedBook.tittle = currentBorBooks.get(bookPosition).select("label > a").html().replace("</span>", "");
+  		   borrowedBook.bookURL = "http://ocean.ntou.edu.tw:1083" + currentBorBooks.get(bookPosition).select("label > a").attr("href").toString();
+  		   borrowedBook.status = currentBorBooks.get(bookPosition+2).toString().replace("</td>", "");
+  		   bookPosition+=infoPerBooks;
+	  		   try {
+				j_borrowedBook.put("tittle", borrowedBook.tittle);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-	    	 try {
-				j_history.put("borrowDate", h.borrowDate);
+	  		   try {
+				j_borrowedBook.put("bookURL", borrowedBook.bookURL);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-	    	 try {
-				j_history.put("chkBox", h.chkBox);
+	  		   try {
+				j_borrowedBook.put("status", borrowedBook.status);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-	    	 result.put(j_history);
-	    	 borrowPostion+=5;
-	     }
- 
-	     out.println(result);      
-    }
-   
+	  		  try { 
+					j_borrowedBook.put("radioValue", borrowedBook.radioVal);
+			} catch (JSONException e) {
+					e.printStackTrace();
+			}
+  		 result.put(j_borrowedBook);	
+  	   } //end of for
+  	   
+  	   out.println(result);
+	}
 }
