@@ -92,9 +92,9 @@ public class getCurrentBorrowedBooks  extends HttpServlet {
   		   BorrowedBook  borrowedBook  = new BorrowedBook();
   		   JSONObject j_borrowedBook= new JSONObject();
   		   borrowedBook.radioVal = currentBorBooks.get(bookPosition-1).select("input").attr("value");
-  		   borrowedBook.tittle = currentBorBooks.get(bookPosition).select("label > a").html().replace("</span>", "");
+  		   borrowedBook.tittle = currentBorBooks.get(bookPosition).select("label > a").text().replace("</span>", "");
   		   borrowedBook.bookURL = "http://ocean.ntou.edu.tw:1083" + currentBorBooks.get(bookPosition).select("label > a").attr("href").toString();
-  		   borrowedBook.status = currentBorBooks.get(bookPosition+2).toString().replace("</td>", "");
+  		   borrowedBook.status = currentBorBooks.get(bookPosition+2).text().replace("</td>", "");
   		   bookPosition+=infoPerBooks;
 	  		   try {
 				j_borrowedBook.put("tittle", borrowedBook.tittle);

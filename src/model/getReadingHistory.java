@@ -121,7 +121,7 @@ public class getReadingHistory  extends HttpServlet {
 	    	 borrowPostion+=5;
 	     }
  
-	     out.println(result);      
+	      out.println(result);      
     }
    
 }
