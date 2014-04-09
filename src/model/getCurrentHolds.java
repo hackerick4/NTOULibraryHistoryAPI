@@ -97,10 +97,10 @@ public class getCurrentHolds  extends HttpServlet {
 	    	 for (int chkBox = 0 ; chkBox < reserveBookCount ; ++chkBox ){
 	    		 ReserveBook  reservebook  = new ReserveBook();
 	    		 JSONObject j_reservebook = new JSONObject();
-	    		 reservebook.tittle = reserveBookTittleList.get(chkBox) .html();
+	    		 reservebook.tittle = reserveBookTittleList.get(chkBox). text();
 	    		 reservebook.radioValue = reserveBookAnotherInfo.get(reserveInfoPosition-1).select("input").attr("id").substring(6);
-	    		 reservebook.status = reserveBookAnotherInfo.get(reserveInfoPosition+1) . html();
-	    		 reservebook.location = reserveBookAnotherInfo.get(reserveInfoPosition+2) . html();
+	    		 reservebook.status = reserveBookAnotherInfo.get(reserveInfoPosition+1) . text();
+	    		 reservebook.location = reserveBookAnotherInfo.get(reserveInfoPosition+2) . text();
 	    		  try {
 					j_reservebook.put("tittle",  reservebook.tittle);
 				} catch (JSONException e) {

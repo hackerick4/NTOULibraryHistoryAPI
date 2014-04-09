@@ -96,15 +96,15 @@ public class reserveBook  extends HttpServlet {
 	    	 
 	    	 /**fetch reserve successInfo**/
 	    	 int bookLocationIndex = 0, bookDeadLineIndex = 3;
-	    	 String bookTittle= chk_doc.select("html > body > strong").html() ;
+	    	 String bookTittle= chk_doc.select("html > body > strong").text() ;
 	    	
 	    	  Elements reserveInfo = reserveInfoDoc.select("html > body > center > table > tbody > tr >td");
 	    	  
 	    	  
 	    	 
 	    	  if (reserveInfo.hasText()) {
-			    	 String bookLocation = reserveInfo.get(bookLocationIndex) . html();
-			         String bookDeadLine = reserveInfo.get(bookDeadLineIndex) . html();
+			    	 String bookLocation = reserveInfo.get(bookLocationIndex) . text();
+			         String bookDeadLine = reserveInfo.get(bookDeadLineIndex) . text();
 			         	         
 			         /**prepare response**/
 			         JSONObject jsonResponse = new JSONObject();
