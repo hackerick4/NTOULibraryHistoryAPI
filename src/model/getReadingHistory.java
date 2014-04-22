@@ -82,7 +82,10 @@ public class getReadingHistory  extends HttpServlet {
     	    		  .cookie("III_EXPT_FILE" , "aa17054" )
     	    		  .cookie("SESSION_LANGUAGE","cht")
     	    		  .cookie("SESSION_SCOPE","0")
+    	    		  .timeout(15*1000)
     	    		  .execute();
+    	     
+    	     
     	    /*String requestURL = "http://127.0.0.1:8080/LibraryHistoryAPI/LibraryTest.html";
      	     Connection.Response cr =Jsoup.connect(requestURL)
      	    		   .execute();*/
