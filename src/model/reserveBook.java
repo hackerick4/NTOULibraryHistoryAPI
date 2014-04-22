@@ -30,7 +30,8 @@ public class reserveBook  extends HttpServlet {
 	    	response.setContentType("text/html;charset=utf-8");
 	    	String account = request.getParameter("account");
 	    	String pwd = request.getParameter("password");
-	    	String reserveURL = request.getParameter("reserve");
+	    	String reserveURL = request.getParameter("reserveURL");
+	    	reserveURL = reserveURL.replaceAll("(ANDCHAR)", "&");
 	    	PrintWriter out = response.getWriter();
 	    	
 	    	String urLoginlParameters = "code=" + account + "&pin=" + pwd + "&submit.x=0&submit.y=0&submit=submit";

@@ -19,7 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
+ 
 // Extend HttpServlet class
 public class getReadingHistory  extends HttpServlet {
 	 
@@ -27,6 +27,7 @@ public class getReadingHistory  extends HttpServlet {
     {
        public String tittle ="";
        public String borrowDate = "";
+       public String bookDetailURL = "";
        public int  chkBox = 0;
     }
 
@@ -75,31 +76,42 @@ public class getReadingHistory  extends HttpServlet {
     	      String myLocation = myLocationTokens[ 2 ];    	    
 
     	/**start to fetch reading history**/
-    	     String requestURL = "http://ocean.ntou.edu.tw:1083/patroninfo~S0*cht/" +  myLocation + "/readinghistory";
+    	    String requestURL = "http://ocean.ntou.edu.tw:1083/patroninfo~S0*cht/" +  myLocation + "/readinghistory";
     	     Connection.Response cr =Jsoup.connect(requestURL)
     	    		  .cookie("III_SESSION_ID", session)
     	    		  .cookie("III_EXPT_FILE" , "aa17054" )
     	    		  .cookie("SESSION_LANGUAGE","cht")
     	    		  .cookie("SESSION_SCOPE","0")
     	    		  .execute();
+    	    /*String requestURL = "http://127.0.0.1:8080/LibraryHistoryAPI/LibraryTest.html";
+     	     Connection.Response cr =Jsoup.connect(requestURL)
+     	    		   .execute();*/
+    	    
+    	      
+    	/*  String requestURL = "http://127.0.0.1:8080/LibraryHistoryAPI/bigReadingHistoyData.html";
+     	     Connection.Response cr =Jsoup.connect(requestURL)
+     	    		   .execute();*/
+    	     
+    	     
     	     Document doc = Jsoup.parse(cr.body(),"utf-8");
     	     
     	     
 	     /***** fetch History*****/
 	     Elements tittles_HTML = doc.select("html > body > div >form > table >tbody >tr > td >a");
 	     Elements borrowDates_HTML = doc.select("html > body > div > form > table > tbody > tr > td");
-	     
 	    
 	     
 	     /*** convert result to json string***/
 
-	     int NumberOfHistory = tittles_HTML.size() , borrowPostion = 3; //borrow is ar 4th td
+	     int NumberOfHistory = tittles_HTML.size() , borrowPostion = 3 + (NumberOfHistory-1) * 5; //borrow is at 4th td
 	     JSONArray result = new JSONArray();
-	     for (int historyIndex = (page-1)*10 ; historyIndex < (page-1)*10+10 ; ++historyIndex){
-	    	 if(historyIndex >= NumberOfHistory) break;
+	     for (int historyIndex  = NumberOfHistory - ( (page-1)*10 )-1 ; historyIndex > NumberOfHistory - ( (page-1)*10 ) -10 -1  ; --historyIndex){
+	    	 
+	    	 if(historyIndex < 0) break;
 	    	 History h = new History();
-	    	 h.tittle = tittles_HTML.get(historyIndex).html();
-	    	 h.borrowDate = borrowDates_HTML.get(borrowPostion).html();
+	    	 h.tittle = tittles_HTML.get(historyIndex).text();
+	    	 h.bookDetailURL = tittles_HTML.get(historyIndex).attr("href");
+	    	 h.borrowDate = borrowDates_HTML.get(borrowPostion).text();
 	    	 h.chkBox = historyIndex;
 	    	 JSONObject j_history = new JSONObject();
 	    	 try {
@@ -107,6 +119,13 @@ public class getReadingHistory  extends HttpServlet {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
+	    	 
+	    	 try {
+				j_history.put("bookDetailURL", "http://ocean.ntou.edu.tw:1083/" + h.bookDetailURL);
+			} catch (JSONException e1) {
+				e1.printStackTrace();
+			}
+	    	 
 	    	 try {
 				j_history.put("borrowDate", h.borrowDate);
 			} catch (JSONException e) {
@@ -118,7 +137,7 @@ public class getReadingHistory  extends HttpServlet {
 				e.printStackTrace();
 			}
 	    	 result.put(j_history);
-	    	 borrowPostion+=5;
+	    	 borrowPostion -=5;
 	     }
  
 	      out.println(result);      
