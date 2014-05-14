@@ -71,7 +71,8 @@ public class renewBook  extends HttpServlet {
 	       	    		  .cookie("SESSION_LANGUAGE","cht")
 	       	    		  .cookie("SESSION_SCOPE","0")
 	       	    		  .post();
-    	      Jsoup.connect("http://ocean.ntou.edu.tw:1083/patroninfo~S0*cht/" + myLocation +"/holds")
+    	      
+    	      Document renewRes = Jsoup.connect("http://ocean.ntou.edu.tw:1083/patroninfo~S0*cht/" + myLocation +"/items")
               .data("currentsortorder" , "current_checkout")
               .data("renew0", radioVal)
               .data("currentsortorder" , "current_checkout")
@@ -81,13 +82,15 @@ public class renewBook  extends HttpServlet {
 	    		  .cookie("SESSION_LANGUAGE","cht")
 	    		  .cookie("SESSION_SCOPE","0")
 	    		  .post();
-    	      
-    	      Elements renewBook = chk_doc.select("html > body > span > form > table > tbody > tr > td > label > a");
-    	      
-    	    	if (renewBook.hasText()){
+    	     // out.println(renewRes);
+    	      Elements someErrorMsg = renewRes.select("html > body > div > form > table > tbody > tr > td > em > font");
+    	     // out.println(someErrorMsg);
+    	    	
+    	      if (someErrorMsg.hasText()){
     	    		JSONObject jsonResponse = new JSONObject();
     	    		try {
-  					jsonResponse.put("querySuccess", "true");
+  					jsonResponse.put("querySuccess", "false");
+  					jsonResponse.put("errorMsg",someErrorMsg.text());
   				} catch (JSONException e) {
   					// TODO Auto-generated catch block
   					e.printStackTrace();
@@ -97,7 +100,7 @@ public class renewBook  extends HttpServlet {
     	    	else{
     	    		JSONObject jsonResponse = new JSONObject();
     	    		try {
-  					jsonResponse.put("querySuccess", "false");
+  					jsonResponse.put("querySuccess", "true");
   				} catch (JSONException e) {
   					// TODO Auto-generated catch block
   					e.printStackTrace();
