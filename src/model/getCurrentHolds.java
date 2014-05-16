@@ -104,7 +104,7 @@ public class getCurrentHolds  extends HttpServlet {
 	    		 reservebook.status = reserveBookAnotherInfo.get(reserveInfoPosition+1) . text();
 	    		 reservebook.location = reserveBookAnotherInfo.get(reserveInfoPosition+2) . text();
 	    		  try {
-					j_reservebook.put("tittle",  reservebook.tittle);
+					j_reservebook.put("title",  reservebook.tittle);
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
