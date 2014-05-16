@@ -25,6 +25,8 @@ public class getCurrentBorrowedBooks  extends HttpServlet {
        public String status = "";
        public String bookURL = "";
        public String radioVal = "";
+       public String barcode = "";
+       public String call  = "";
     }	
 
 	
@@ -94,10 +96,12 @@ public class getCurrentBorrowedBooks  extends HttpServlet {
   		   borrowedBook.radioVal = currentBorBooks.get(bookPosition-1).select("input").attr("value");
   		   borrowedBook.tittle = currentBorBooks.get(bookPosition).select("label > a").text().replace("</span>", "");
   		   borrowedBook.bookURL = "http://ocean.ntou.edu.tw:1083" + currentBorBooks.get(bookPosition).select("label > a").attr("href").toString();
+  		   borrowedBook.barcode = currentBorBooks.get(bookPosition+1).text();
   		   borrowedBook.status = currentBorBooks.get(bookPosition+2).text().replace("</td>", "");
+  		   borrowedBook.call = currentBorBooks.get(bookPosition+3).text();
   		   bookPosition+=infoPerBooks;
 	  		   try {
-				j_borrowedBook.put("tittle", borrowedBook.tittle);
+				j_borrowedBook.put("title", borrowedBook.tittle);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -111,11 +115,22 @@ public class getCurrentBorrowedBooks  extends HttpServlet {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
+	  		 try { 
+					j_borrowedBook.put("barcode", borrowedBook.barcode);
+		  		} catch (JSONException e) {
+					e.printStackTrace();
+		  		}
+		  		try { 
+					j_borrowedBook.put("call", borrowedBook.call);
+		  		} catch (JSONException e) {
+					e.printStackTrace();
+		  		}
 	  		  try { 
 					j_borrowedBook.put("radioValue", borrowedBook.radioVal);
 			} catch (JSONException e) {
 					e.printStackTrace();
 			}
+	  		
   		 result.put(j_borrowedBook);	
   	   } //end of for
   	   

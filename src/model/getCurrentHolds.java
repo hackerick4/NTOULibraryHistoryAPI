@@ -22,7 +22,7 @@ import org.json.JSONObject;
 public class getCurrentHolds  extends HttpServlet {
 	  public class ReserveBook
 	    {
-	       public String tittle ="";
+	       public String title ="";
 	       public String status = "";
 	       public String location = "";
 	       public String radioValue = "";
@@ -98,13 +98,13 @@ public class getCurrentHolds  extends HttpServlet {
 	    	 for (int chkBox = 0 ; chkBox < reserveBookCount ; ++chkBox ){
 	    		 ReserveBook  reservebook  = new ReserveBook();
 	    		 JSONObject j_reservebook = new JSONObject();
-	    		 reservebook.tittle = reserveBookTittleList.get(chkBox). text();
+	    		 reservebook.title = reserveBookTittleList.get(chkBox). text();
 	    		 reservebook.bookURL = reserveBookTittleList.get(chkBox). attr("href");
 	    		 reservebook.radioValue = reserveBookAnotherInfo.get(reserveInfoPosition-1).select("input").attr("id").substring(6);
 	    		 reservebook.status = reserveBookAnotherInfo.get(reserveInfoPosition+1) . text();
 	    		 reservebook.location = reserveBookAnotherInfo.get(reserveInfoPosition+2) . text();
 	    		  try {
-					j_reservebook.put("title",  reservebook.tittle);
+					j_reservebook.put("title",  reservebook.title);
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}

@@ -25,9 +25,10 @@ public class getReadingHistory  extends HttpServlet {
 	 
     public class History
     {
-       public String tittle ="";
+       public String title ="";
        public String borrowDate = "";
        public String bookDetailURL = "";
+       public String detail = "";
        public int  chkBox = 0;
     }
 
@@ -112,17 +113,22 @@ public class getReadingHistory  extends HttpServlet {
 	    	 
 	    	 if(historyIndex < 0) break;
 	    	 History h = new History();
-	    	 h.tittle = tittles_HTML.get(historyIndex).text();
+	    	 h.title = tittles_HTML.get(historyIndex).text();
 	    	 h.bookDetailURL = tittles_HTML.get(historyIndex).attr("href");
 	    	 h.borrowDate = borrowDates_HTML.get(borrowPostion).text();
+	    	 h.detail = borrowDates_HTML.get(borrowPostion+1).text();
 	    	 h.chkBox = historyIndex;
 	    	 JSONObject j_history = new JSONObject();
 	    	 try {
-				j_history.put("tittle", h.tittle);
+				j_history.put("title", h.title);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-	    	 
+	    	 try {
+					j_history.put("detail", h.detail);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
 	    	 try {
 				j_history.put("bookDetailURL", "http://ocean.ntou.edu.tw:1083/" + h.bookDetailURL);
 			} catch (JSONException e1) {
