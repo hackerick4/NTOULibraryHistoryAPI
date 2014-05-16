@@ -26,6 +26,7 @@ public class getCurrentHolds  extends HttpServlet {
 	       public String status = "";
 	       public String location = "";
 	       public String radioValue = "";
+	       public String bookURL = "";
 	       public int  chkBox = 0;
 	    }
 
@@ -98,6 +99,7 @@ public class getCurrentHolds  extends HttpServlet {
 	    		 ReserveBook  reservebook  = new ReserveBook();
 	    		 JSONObject j_reservebook = new JSONObject();
 	    		 reservebook.tittle = reserveBookTittleList.get(chkBox). text();
+	    		 reservebook.bookURL = reserveBookTittleList.get(chkBox). attr("href");
 	    		 reservebook.radioValue = reserveBookAnotherInfo.get(reserveInfoPosition-1).select("input").attr("id").substring(6);
 	    		 reservebook.status = reserveBookAnotherInfo.get(reserveInfoPosition+1) . text();
 	    		 reservebook.location = reserveBookAnotherInfo.get(reserveInfoPosition+2) . text();
@@ -118,6 +120,11 @@ public class getCurrentHolds  extends HttpServlet {
 				}
 	    		 try {
 						j_reservebook.put("chkBox", chkBox);
+					} catch (JSONException e) {
+						e.printStackTrace();
+				}
+	    		 try {
+						j_reservebook.put("bookDetailURL",   "http://ocean.ntou.edu.tw:1083/" + reservebook.bookURL);
 					} catch (JSONException e) {
 						e.printStackTrace();
 				}

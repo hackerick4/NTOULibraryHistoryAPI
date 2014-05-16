@@ -99,8 +99,10 @@ public class reserveBook  extends HttpServlet {
 	    	 int bookLocationIndex = 0, bookDeadLineIndex = 3;
 	    	 String bookTittle= chk_doc.select("html > body > strong").text() ;
 	    	
+	    	 
+	    	// out.println(reserveInfoDoc);
 	    	  Elements reserveInfo = reserveInfoDoc.select("html > body > center > table > tbody > tr >td");
-	    	  
+	    	  Elements errMsg = reserveInfoDoc.select("html > body > center > p > font");
 	    	  
 	    	 
 	    	  if (reserveInfo.hasText()) {
@@ -134,9 +136,10 @@ public class reserveBook  extends HttpServlet {
 					         out.println(jsonResponse);
 			         
 	    	  }	else {
-			        	 JSONObject jsonResponse = new JSONObject();
+	    		        JSONObject jsonResponse = new JSONObject();
 			        	 try {
 								jsonResponse.put("querySuccess", "false");
+								jsonResponse.put("errMsg", errMsg.text());
 							} catch (JSONException e) {
 								e.printStackTrace();
 							}
