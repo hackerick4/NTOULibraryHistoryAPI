@@ -82,11 +82,12 @@ public class renewBook  extends HttpServlet {
 	    		  .cookie("SESSION_LANGUAGE","cht")
 	    		  .cookie("SESSION_SCOPE","0")
 	    		  .post();
-    	     //out.println(renewRes);
+    	    
     	      Elements someErrorMsg = renewRes.select("html > body > div > form > table > tbody > tr > td > em > font");
     	     // Elements bookURL = renewRes.select("html > body > div > form > table > tbody > tr > td  > label > a");
-    	     // out.println(someErrorMsg);
-    	    //	out.println(bookURL.attr("href"));
+    	     //out.println(someErrorMsg);
+    	    //out.println(bookURL.attr("href"));
+    	      out.println(renewRes);
     	      if (someErrorMsg.hasText()){
     	    		JSONObject jsonResponse = new JSONObject();
     	    		try {

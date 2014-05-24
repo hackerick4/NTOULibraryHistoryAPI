@@ -68,4 +68,13 @@
     <url-pattern>/login.do</url-pattern>
   </servlet-mapping>
 
+
+   <servlet>
+    <servlet-name>delRHBook</servlet-name>
+    <servlet-class>model.delRHBook</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>delRHBook</servlet-name>
+    <url-pattern>/delRHBook.do</url-pattern>
+  </servlet-mapping>
 </web-app>

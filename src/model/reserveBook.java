@@ -97,7 +97,7 @@ public class reserveBook  extends HttpServlet {
 	    	 
 	    	 /**fetch reserve successInfo**/
 	    	 int bookLocationIndex = 0, bookDeadLineIndex = 3;
-	    	 String bookTittle= chk_doc.select("html > body > strong").text() ;
+	    	 String booktitle= chk_doc.select("html > body > strong").text() ;
 	    	
 	    	 
 	    	// out.println(reserveInfoDoc);
@@ -118,7 +118,7 @@ public class reserveBook  extends HttpServlet {
 								e.printStackTrace();
 							}
 					         try {
-									jsonResponse.put("tittle", bookTittle);
+									jsonResponse.put("title", booktitle);
 								} catch (JSONException e) {
 									e.printStackTrace();
 								}
@@ -139,7 +139,7 @@ public class reserveBook  extends HttpServlet {
 	    		        JSONObject jsonResponse = new JSONObject();
 			        	 try {
 								jsonResponse.put("querySuccess", "false");
-								jsonResponse.put("errMsg", errMsg.text());
+								jsonResponse.put("errorMsg", errMsg.text());
 							} catch (JSONException e) {
 								e.printStackTrace();
 							}

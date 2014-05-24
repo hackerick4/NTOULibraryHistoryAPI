@@ -87,19 +87,19 @@ public class getCurrentHolds  extends HttpServlet {
 	    	
 	    	
 	    	//**fetch infomation*//
-	    	 Elements reserveBookTittleList = chk_doc.select("html > body > div >form > table > tbody > tr > td > label > a ");
-	    	// out.println(reserveBookTittleList);
+	    	 Elements reserveBooktitleList = chk_doc.select("html > body > div >form > table > tbody > tr > td > label > a ");
+	    	// out.println(reserveBooktitleList);
 	    	 Elements reserveBookAnotherInfo = chk_doc.select("html > body > div >form > table > tbody > tr > td ");
 	    	
 	    	// out.println(reserveBookAnotherInfo);
 	    	 
-	    	 int reserveInfoPosition= 1, reserveBookCount = reserveBookTittleList.size();
+	    	 int reserveInfoPosition= 1, reserveBookCount = reserveBooktitleList.size();
 	    	 JSONArray result = new JSONArray();
 	    	 for (int chkBox = 0 ; chkBox < reserveBookCount ; ++chkBox ){
 	    		 ReserveBook  reservebook  = new ReserveBook();
 	    		 JSONObject j_reservebook = new JSONObject();
-	    		 reservebook.title = reserveBookTittleList.get(chkBox). text();
-	    		 reservebook.bookURL = reserveBookTittleList.get(chkBox). attr("href");
+	    		 reservebook.title = reserveBooktitleList.get(chkBox). text();
+	    		 reservebook.bookURL = reserveBooktitleList.get(chkBox). attr("href");
 	    		 reservebook.radioValue = reserveBookAnotherInfo.get(reserveInfoPosition-1).select("input").attr("id").substring(6);
 	    		 reservebook.status = reserveBookAnotherInfo.get(reserveInfoPosition+1) . text();
 	    		 reservebook.location = reserveBookAnotherInfo.get(reserveInfoPosition+2) . text();

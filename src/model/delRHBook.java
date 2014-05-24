@@ -21,24 +21,16 @@ import org.json.JSONObject;
 
  
 // Extend HttpServlet class
-public class getReadingHistory  extends HttpServlet {
+public class delRHBook  extends HttpServlet {
 	 
-    public class History
-    {
-       public String title ="";
-       public String borrowDate = "";
-       public String bookDetailURL = "";
-       public String detail = "";
-       public int  chkBox = 0;
-    }
-
+  
 	private static final long serialVersionUID = 1L;
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     	response.setContentType("text/html;charset=utf-8");
     	String account = request.getParameter("account");
     	String pwd = request.getParameter("password");
-    	int page = Integer.parseInt( request.getParameter("segment"));
+    	int rsh = Integer.parseInt( request.getParameter("chkBox"));
     	PrintWriter out = response.getWriter();
     	
     	/*****prepare the parameters*****/
@@ -77,7 +69,7 @@ public class getReadingHistory  extends HttpServlet {
     	      String myLocation = myLocationTokens[ 2 ];    	    
 
     	/**start to fetch reading history**/
-    	    String requestURL = "http://ocean.ntou.edu.tw:1083/patroninfo~S0*cht/" +  myLocation + "/readinghistory";
+    	    String requestURL = "http://ocean.ntou.edu.tw:1083/patroninfo~S0*cht/" +  myLocation + "/readinghistory/rsh&rsh" + rsh +"=1";
     	     Connection.Response cr =Jsoup.connect(requestURL)
     	    		  .cookie("III_SESSION_ID", session)
     	    		  .cookie("III_EXPT_FILE" , "aa17054" )
@@ -86,70 +78,14 @@ public class getReadingHistory  extends HttpServlet {
     	    		  .timeout(15*1000)
     	    		  .execute();
     	     
-    	     
-    	    /*String requestURL = "http://127.0.0.1:8080/LibraryHistoryAPI/LibraryTest.html";
-     	     Connection.Response cr =Jsoup.connect(requestURL)
-     	    		   .execute();*/
-    	    
-    	      
-    	/*  String requestURL = "http://127.0.0.1:8080/LibraryHistoryAPI/bigReadingHistoyData.html";
-     	     Connection.Response cr =Jsoup.connect(requestURL)
-     	    		   .execute();*/
-    	     
-    	     
-    	     Document doc = Jsoup.parse(cr.body(),"utf-8");
-    	     
-    	     
-	     /***** fetch History*****/
-	     Elements titles_HTML = doc.select("html > body > div >form > table >tbody >tr > td >a");
-	     Elements borrowDates_HTML = doc.select("html > body > div > form > table > tbody > tr > td");
-	    
-	     
-	     /*** convert result to json string***/
-
-	     int NumberOfHistory = titles_HTML.size() , borrowPostion = 3 + (NumberOfHistory-1) * 5; //borrow is at 4th td
-	     JSONArray result = new JSONArray();
-	     for (int historyIndex  = NumberOfHistory - ( (page-1)*10 )-1 ; historyIndex > NumberOfHistory - ( (page-1)*10 ) -10 -1  ; --historyIndex){
-	    	 
-	    	 if(historyIndex < 0) break;
-	    	 History h = new History();
-	    	 h.title = titles_HTML.get(historyIndex).text();
-	    	 h.bookDetailURL = titles_HTML.get(historyIndex).attr("href");
-	    	 h.borrowDate = borrowDates_HTML.get(borrowPostion).text();
-	    	 h.detail = borrowDates_HTML.get(borrowPostion+1).text();
-	    	 h.chkBox = historyIndex;
-	    	 JSONObject j_history = new JSONObject();
-	    	 try {
-				j_history.put("title", h.title);
+    	     JSONObject jsonResponse = new JSONObject();
+    	     try {
+				jsonResponse.put("querySuccess", "true");
 			} catch (JSONException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	    	 try {
-					j_history.put("detail", h.detail);
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-	    	 try {
-				j_history.put("bookDetailURL", "http://ocean.ntou.edu.tw:1083/" + h.bookDetailURL);
-			} catch (JSONException e1) {
-				e1.printStackTrace();
-			}
-	    	 
-	    	 try {
-				j_history.put("borrowDate", h.borrowDate);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-	    	 try {
-				j_history.put("chkBox", h.chkBox);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-	    	 result.put(j_history);
-	    	 borrowPostion -=5;
-	     }
- 
-	      out.println(result);      
+    	     
     }
-   
+    
 }
