@@ -84,10 +84,6 @@ public class renewBook  extends HttpServlet {
 	    		  .post();
     	    
     	      Elements someErrorMsg = renewRes.select("html > body > div > form > table > tbody > tr > td > em > font");
-    	     // Elements bookURL = renewRes.select("html > body > div > form > table > tbody > tr > td  > label > a");
-    	     //out.println(someErrorMsg);
-    	    //out.println(bookURL.attr("href"));
-    	      out.println(renewRes);
     	      if (someErrorMsg.hasText()){
     	    		JSONObject jsonResponse = new JSONObject();
     	    		try {

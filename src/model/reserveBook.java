@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.lang.String;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,6 +17,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+
 
 public class reserveBook  extends HttpServlet {
 	 /**
@@ -77,10 +80,33 @@ public class reserveBook  extends HttpServlet {
    	    		  .cookie("SESSION_LANGUAGE","cht")
    	    		  .cookie("SESSION_SCOPE","0")
    	    		  .post();
+	    	// out.println(chk_doc);
+	    	 
 	    	 /**start to fetch reserveBookRatio**/
-	         String radioValue= chk_doc.select("html > body > form > table > tbody > tr > td > input").attr("value") ;
-	       
-	         /**post the reserveMSG**/
+	    	 int minRes=-1;
+	    	 int bookTable_it,radio_it=0, minRadio=0;
+	    	 String radioValue = null;	 
+	    	 Elements bookTable = chk_doc.select("html > body > form > table > tbody > tr > td ") ;
+	    	 
+	    	 for ( bookTable_it = 4 ; bookTable_it < bookTable.size() ; bookTable_it +=5,radio_it+=5){
+	    		 if (bookTable.get(bookTable_it).text().contains("在架上")) continue;
+	    		 if (!bookTable.get(bookTable_it).text().contains("+")) { //nobody res this book
+	    			 radioValue = bookTable.get(radio_it).select("input").attr("value");
+	    			 break;
+	    		 }
+	    		 String resNumString = bookTable.get(bookTable_it).text();
+	    		 resNumString = resNumString.substring(resNumString.indexOf("+")).replace(" 預約", "");
+	    		 out.println(resNumString);
+	    		 int t = Integer.parseInt(resNumString);
+	    		 if (t < minRes){
+	    			 minRes = t;
+	    			 minRadio = radio_it;	    			 
+	    		 }
+	    		  radioValue = bookTable.get(minRadio).select("input").attr("value"); 	    	
+	    	 }
+	    	// out.println(radioValue);
+	    	 
+	        /**post the reserveMSG**/
 	    	 Document reserveInfoDoc =Jsoup.connect(reserveURL)
 	              .data("code" , account)
 	              .data("pin" , pwd)
@@ -100,7 +126,7 @@ public class reserveBook  extends HttpServlet {
 	    	 String booktitle= chk_doc.select("html > body > strong").text() ;
 	    	
 	    	 
-	    	// out.println(reserveInfoDoc);
+	    	 //out.println(reserveInfoDoc);
 	    	  Elements reserveInfo = reserveInfoDoc.select("html > body > center > table > tbody > tr >td");
 	    	  Elements errMsg = reserveInfoDoc.select("html > body > center > p > font");
 	    	  
