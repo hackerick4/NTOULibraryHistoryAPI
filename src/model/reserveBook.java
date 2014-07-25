@@ -33,7 +33,7 @@ public class reserveBook  extends HttpServlet {
 	    	response.setContentType("text/html;charset=utf-8");
 	    	String account = request.getParameter("account");
 	    	String pwd = request.getParameter("password");
-	    	String radioValue = request.getParameter("radioValue");;	 
+	    	String radioValue = request.getParameter("radioValue");	 
 	    	String reserveURL = request.getParameter("reserveURL");
 	    	reserveURL = reserveURL.replaceAll("(ANDCHAR)", "&");
 	    	PrintWriter out = response.getWriter();

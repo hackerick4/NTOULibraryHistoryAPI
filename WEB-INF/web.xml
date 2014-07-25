@@ -77,4 +77,13 @@
     <servlet-name>delRHBook</servlet-name>
     <url-pattern>/delRHBook.do</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>canReserveBooksList</servlet-name>
+    <servlet-class>model.canReserveBooksList</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>canReserveBooksList</servlet-name>
+    <url-pattern>/canReserveBooksList.do</url-pattern>
+  </servlet-mapping>
 </web-app>
