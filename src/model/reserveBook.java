@@ -33,6 +33,7 @@ public class reserveBook  extends HttpServlet {
 	    	response.setContentType("text/html;charset=utf-8");
 	    	String account = request.getParameter("account");
 	    	String pwd = request.getParameter("password");
+	    	String radioValue = request.getParameter("radioValue");;	 
 	    	String reserveURL = request.getParameter("reserveURL");
 	    	reserveURL = reserveURL.replaceAll("(ANDCHAR)", "&");
 	    	PrintWriter out = response.getWriter();
@@ -83,10 +84,9 @@ public class reserveBook  extends HttpServlet {
 	    	// out.println(chk_doc);
 	    	 
 	    	 /**start to fetch reserveBookRatio**/
-	    	 int minRes=-1;
-	    	 int bookTable_it,radio_it=0, minRadio=0;
-	    	 String radioValue = null;	 
-	    	 Elements bookTable = chk_doc.select("html > body > form > table > tbody > tr > td ") ;
+	    	// int minRes=-1;
+	    	// int bookTable_it,radio_it=0, minRadio=0;	 
+	    	/* Elements bookTable = chk_doc.select("html > body > form > table > tbody > tr > td ") ;
 	    	 
 	    	 for ( bookTable_it = 4 ; bookTable_it < bookTable.size() ; bookTable_it +=5,radio_it+=5){
 	    		 if (bookTable.get(bookTable_it).text().contains("在架上")) continue;
@@ -96,14 +96,13 @@ public class reserveBook  extends HttpServlet {
 	    		 }
 	    		 String resNumString = bookTable.get(bookTable_it).text();
 	    		 resNumString = resNumString.substring(resNumString.indexOf("+")).replace(" 預約", "");
-	    		 out.println(resNumString);
 	    		 int t = Integer.parseInt(resNumString);
 	    		 if (t < minRes){
 	    			 minRes = t;
 	    			 minRadio = radio_it;	    			 
 	    		 }
 	    		  radioValue = bookTable.get(minRadio).select("input").attr("value"); 	    	
-	    	 }
+	    	 }*/
 	    	// out.println(radioValue);
 	    	 
 	        /**post the reserveMSG**/
