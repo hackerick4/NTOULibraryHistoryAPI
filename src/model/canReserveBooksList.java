@@ -88,7 +88,41 @@ public class canReserveBooksList  extends HttpServlet {
 	    	 Elements bookTable = chk_doc.select("html > body > form > table > tbody > tr > td ") ;
 	    	 JSONArray result = new JSONArray();
 	    	 for ( bookTable_it = 0 ; bookTable_it < bookTable.size() ; bookTable_it +=5){
-	    		 if (bookTable.get(bookTable_it+4).text().contains("在架上")) continue;
+	    		 if (bookTable.get(bookTable_it+4).text().contains("在架上")) {	    			 
+	    			 String bookLocation = bookTable.get(bookTable_it+1).text();
+	    			 String bookCall = bookTable.get(bookTable_it+2).text();
+	    			 String bookCode = bookTable.get(bookTable_it+3).text();
+	    			 String bookResStatus = bookTable.get(bookTable_it+4).text();
+	    			 JSONObject resBook = new JSONObject();
+	    		   try {
+						resBook.put("radioVal", "NULL");
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+	    			 try {
+						resBook.put("bookLocation", bookLocation);
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+	    			 try {
+						resBook.put("bookCall", bookCall);
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+	    			 try {
+						resBook.put("bookCode", bookCode);
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+	    			 try {
+						resBook.put("bookResStatus", bookResStatus);
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}	    	 
+	    			 	    		 
+	    			 result.put(resBook);
+	    			 continue;
+	    		 }
 	    		 else {
 	    			 String radioVal = bookTable.get(bookTable_it).select("input").attr("value");
 	    			 String bookLocation = bookTable.get(bookTable_it+1).text();
