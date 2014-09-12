@@ -87,11 +87,10 @@ public class getCurrentHolds  extends HttpServlet {
 	    	
 	    	
 	    	//**fetch infomation*//
-	    	 Elements reserveBooktitleList = chk_doc.select("html > body > div >form > table > tbody > tr > td > label > a ");
+	    	 Elements reserveBooktitleList = chk_doc.select("html > body > div >form > table > tbody > tr > td > label > a > span[class*=patFuncTitleMain]");
 	    	// out.println(reserveBooktitleList);
 	    	 Elements reserveBookAnotherInfo = chk_doc.select("html > body > div >form > table > tbody > tr > td ");
-	    	
-	    	// out.println(reserveBookAnotherInfo);
+	    	 //out.println(reserveBookAnotherInfo);
 	    	 
 	    	 int reserveInfoPosition= 1, reserveBookCount = reserveBooktitleList.size();
 	    	 JSONArray result = new JSONArray();
@@ -137,7 +136,7 @@ public class getCurrentHolds  extends HttpServlet {
 	    		 result.put(j_reservebook);
 	    	 }
 	    	  out.println(result);    
-	    	 
+	    	
 	}
 	 
 }
