@@ -77,7 +77,7 @@ public class getReadingHistory  extends HttpServlet {
     	      String myLocation = myLocationTokens[ 2 ];    	    
 
     	/**start to fetch reading history**/
-    	    String requestURL = "http://ocean.ntou.edu.tw:1083/patroninfo~S0*cht/" +  myLocation + "/readinghistory&page="+page;
+    	    String requestURL = "http://ocean.ntou.edu.tw:1083/patroninfo~S0*cht/" +  myLocation + "/readinghistory&page="+((page-1)/5+1);
     	     Connection.Response cr =Jsoup.connect(requestURL)
     	    		  .cookie("III_SESSION_ID", session)
     	    		  .cookie("III_EXPT_FILE" , "aa17054" )
@@ -86,16 +86,7 @@ public class getReadingHistory  extends HttpServlet {
     	    		  .timeout(15*1000)
     	    		  .execute();
     	     
-    	     
-    	    /*String requestURL = "http://127.0.0.1:8080/LibraryHistoryAPI/LibraryTest.html";
-     	     Connection.Response cr =Jsoup.connect(requestURL)
-     	    		   .execute();*/
-    	    
-    	      
-    	/*  String requestURL = "http://127.0.0.1:8080/LibraryHistoryAPI/bigReadingHistoyData.html";
-     	     Connection.Response cr =Jsoup.connect(requestURL)
-     	    		   .execute();*/
-    	     
+    	
     	     
     	     Document doc = Jsoup.parse(cr.body(),"utf-8");
     	     
@@ -104,20 +95,23 @@ public class getReadingHistory  extends HttpServlet {
 	     Elements titles_HTML = doc.select("html > body > div >form > table >tbody >tr > td > a > span[class*=patFuncTitleMain] ");
 	     Elements borrowDates_HTML = doc.select("html > body > div > form > table > tbody > tr > td[class*=patFuncDate]");
 	     Elements detail_HTML = doc.select("html > body > div > form > table > tbody > tr > td[class*=patFuncDetails]");
-	     
+	    
 	     /*** convert result to json string***/
 
 	     JSONArray result = new JSONArray();	     
-
-	     for (int historyIndex  =0; historyIndex < titles_HTML.size() ; ++historyIndex ){
+          
+	     int fetchRangeStartIndex = ( (page-1) % 5 ) * 10;
+	     int fetchRangeEndIndex = ( (page-1) % 5 ) * 10 + 10;
+	     int chkBoxCount = 0;
+	     for (int historyIndex  = fetchRangeStartIndex; historyIndex < fetchRangeEndIndex  ; ++historyIndex ){
 	    	 
-	    	 if(historyIndex < 0) break;
+	    	 if(historyIndex >= titles_HTML.size()) break;
 	    	 History h = new History();
 	    	 h.title = titles_HTML.get(historyIndex).text();
 	    	 h.bookDetailURL = titles_HTML.get(historyIndex).attr("href");
 	    	 h.borrowDate = borrowDates_HTML.get(historyIndex).text();
 	    	 h.detail = detail_HTML.get(historyIndex).text();
-	    	 h.chkBox = 50*(page-1) + historyIndex;
+	    	 h.chkBox =  (page-1)*10 + (chkBoxCount++);
 	    	 JSONObject j_history = new JSONObject();
 	    	 try {
 				j_history.put("title", h.title);
