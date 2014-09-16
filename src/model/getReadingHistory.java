@@ -95,7 +95,8 @@ public class getReadingHistory  extends HttpServlet {
 	     Elements titles_HTML = doc.select("html > body > div >form > table >tbody >tr > td > a > span[class*=patFuncTitleMain] ");
 	     Elements borrowDates_HTML = doc.select("html > body > div > form > table > tbody > tr > td[class*=patFuncDate]");
 	     Elements detail_HTML = doc.select("html > body > div > form > table > tbody > tr > td[class*=patFuncDetails]");
-	    
+	     Elements bookDetailURL_HTML =doc.select("html > body > div >form > table >tbody >tr > td > a[href*=record] ");
+	     
 	     /*** convert result to json string***/
 
 	     JSONArray result = new JSONArray();	     
@@ -108,7 +109,7 @@ public class getReadingHistory  extends HttpServlet {
 	    	 if(historyIndex >= titles_HTML.size()) break;
 	    	 History h = new History();
 	    	 h.title = titles_HTML.get(historyIndex).text();
-	    	 h.bookDetailURL = titles_HTML.get(historyIndex).attr("href");
+	    	 h.bookDetailURL = bookDetailURL_HTML.get(historyIndex*2).attr("href");
 	    	 h.borrowDate = borrowDates_HTML.get(historyIndex).text();
 	    	 h.detail = detail_HTML.get(historyIndex).text();
 	    	 h.chkBox =  (page-1)*10 + (chkBoxCount++);
