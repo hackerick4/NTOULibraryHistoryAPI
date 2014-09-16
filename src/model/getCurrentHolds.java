@@ -88,9 +88,9 @@ public class getCurrentHolds  extends HttpServlet {
 	    	
 	    	//**fetch infomation*//
 	    	 Elements reserveBooktitleList = chk_doc.select("html > body > div >form > table > tbody > tr > td > label > a > span[class*=patFuncTitleMain]");
-	    	// out.println(reserveBooktitleList);
+	    	 Elements reservebookURLList = chk_doc.select("html > body > div >form > table > tbody > tr > td > label > a ");
 	    	 Elements reserveBookAnotherInfo = chk_doc.select("html > body > div >form > table > tbody > tr > td ");
-	    	 //out.println(reserveBookAnotherInfo);
+	    	 
 	    	 
 	    	 int reserveInfoPosition= 1, reserveBookCount = reserveBooktitleList.size();
 	    	 JSONArray result = new JSONArray();
@@ -98,7 +98,7 @@ public class getCurrentHolds  extends HttpServlet {
 	    		 ReserveBook  reservebook  = new ReserveBook();
 	    		 JSONObject j_reservebook = new JSONObject();
 	    		 reservebook.title = reserveBooktitleList.get(chkBox). text();
-	    		 reservebook.bookURL = reserveBooktitleList.get(chkBox). attr("href");
+	    		 reservebook.bookURL = reservebookURLList.get(chkBox*2). attr("href");
 	    		 reservebook.radioValue = reserveBookAnotherInfo.get(reserveInfoPosition-1).select("input").attr("id").substring(6);
 	    		 reservebook.status = reserveBookAnotherInfo.get(reserveInfoPosition+1) . text();
 	    		 reservebook.location = reserveBookAnotherInfo.get(reserveInfoPosition+2) . text();
@@ -123,7 +123,7 @@ public class getCurrentHolds  extends HttpServlet {
 						e.printStackTrace();
 				}
 	    		 try {
-						j_reservebook.put("bookDetailURL",   "http://ocean.ntou.edu.tw:1083/" + reservebook.bookURL);
+						j_reservebook.put("bookDetailURL",   "http://ocean.ntou.edu.tw:1083" + reservebook.bookURL);
 					} catch (JSONException e) {
 						e.printStackTrace();
 				}
